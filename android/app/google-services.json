@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "275384622919",
+    "project_id": "buddynew-14439",
+    "storage_bucket": "buddynew-14439.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:275384622919:android:e9a06f2a56ef3c92473662",
+        "android_client_info": {
+          "package_name": "com.buddynew"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "275384622919-64nlsh09nnifmbv84khs6dg5hjvgpu8b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.buddynew",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "275384622919-gb57ksunl3i3i0k2jole5ofie6su4nie.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtLBQsvvf6aUichyVdwoKg0Gqs6bx55jU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "275384622919-gb57ksunl3i3i0k2jole5ofie6su4nie.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
