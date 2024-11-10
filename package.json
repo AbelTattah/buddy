@@ -1,11 +1,12 @@
 {
   "name": "buddy",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",
+    "update-version": "npm version  patch --no-git-tag-version && npx react-native-version --never-amend --target android",
     "start": "react-native start",
     "test": "jest"
   },

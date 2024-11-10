@@ -198,6 +198,7 @@ const DocumentSearch = ({navigation}: any) => {
     <View
       style={{
         flex: 1,
+        paddingTop:25,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor:
@@ -246,7 +247,6 @@ const DocumentSearch = ({navigation}: any) => {
               borderWidth: 1,
               borderRadius: 10,
               padding: 10,
-              marginTop: 10,
             }}>
               <View style={{
                 width:"100%",

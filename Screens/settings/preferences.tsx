@@ -49,7 +49,7 @@ export default function Preferences() {
               styles.option,
               {color: theme == 'light' ? Colors.primary100 : Colors.primary200},
             ]}>
-           Full Screen
+            Hide Status Bar
           </Text>
           <Switch value={statusBar} onValueChange={hideStatusBar} />
         </TouchableOpacity>
