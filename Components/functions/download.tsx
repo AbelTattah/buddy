@@ -22,7 +22,10 @@ export default function Download({
   setItem: SetStateAction<any>;
 }) {
   const [id, setId] = useState<any>(0);
-
+  const [max, setMax] = useState<any>(0);
+  const [current, setCurrent] = useState<any>(0)
+  const [downloadInProgress, setDownloadInProgress] = useState<boolean>(false)
+  const [jobId, setJobId] = useState<number>(0)
   // Navigation
   const navigation = useNavigation();
 
@@ -31,35 +34,65 @@ export default function Download({
 
   // Download function
   async function download() {
+
+    setDownloadInProgress(true)
     // Update State from parent component
     setState(0.01);
+    let channelId: any = await notifee.createChannel({
+      id: id,
+      name: 'Default Channel',
+    });
+    
+    await notifee.requestPermission();
+    await notifee.displayNotification({
+      id: id,
+      title: 'Downloading',
+      // Download progress in mb
+      body: name,
+      android: {
+        progress: {
+          max:  max,
+          current:current,
+        },
+        channelId
+      },
+    });
 
     // Show Toast
     ToastAndroid.show('Download Started', ToastAndroid.SHORT);
-    let channelId: any = await notifee.createChannel({
-      id: name,
-      name: 'Default Channel',
-    });
+
+
     // Download Options
     const options = {
       fromUrl: url,
       toFile: dest,
       progress: async function (res: any) {
+        // Set State
+
+        setJobId(res.jobId)
+  
+        setState(res.bytesWritten / res.contentLength);
+
+        setCurrent(res.bytesWritten)
+
+        setMax(res.contentLength)
+
         // Create download notification and update the progress
-        await notifee.requestPermission();
         await notifee.displayNotification({
           id: id,
           title: 'Downloading',
           // Download progress in mb
-          body: `${name} ${(
-            (res.bytesWritten / res.contentLength) *
-            100
-          ).toFixed(2)}%`,
+          body: name,
           android: {
+            progress: {
+              max: res.contentLength,
+              current:res.bytesWritten,
+            },
             channelId,
+            ongoing:true,
+            onlyAlertOnce: true,
           },
         });
-        setState(res.bytesWritten / res.contentLength);
       },
     };
 
@@ -75,6 +108,7 @@ export default function Download({
         // Cancel the previous download notification
         await notifee.cancelNotification(id);
 
+        setDownloadInProgress(false)
         // Create a success notification
         await notifee.displayNotification({
           title: 'Download Complete',
@@ -82,14 +116,14 @@ export default function Download({
           body: name + ' Downloaded Successfully',
           android: {
             channelId,
-          },
-          
+          },  
         });
 
         // Save file url and name in local storage
         addToHistory({name: name, endpoint: dest, image: image});
       })
       .catch(async err => {
+        setDownloadInProgress(false)
         // Inform the user about the error
         Alert.alert(
           'Error',
@@ -114,7 +148,13 @@ export default function Download({
             channelId,
           },
         });
+
       });
+
+  }
+
+  async function cancel() {
+    await RNFS.stopDownload(jobId)
   }
 
   async function requestPermission() {
@@ -129,7 +169,11 @@ export default function Download({
     requestPermission();
   }, []);
 
-  return (
-    <PrimaryButton title="Get" size="" radius={10} pressHandler={download} />
+  return (<>
+     {
+      downloadInProgress?     <PrimaryButton title="Cancel" size="" radius={10} pressHandler={cancel} /> :   <PrimaryButton title="Get" size="" radius={10} pressHandler={download} />
+     }
+  </>
+  
   );
 }
