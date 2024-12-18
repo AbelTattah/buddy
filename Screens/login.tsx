@@ -156,7 +156,7 @@ export default function Login({navigation}: any) {
         if (response == null) {
           console.log(response);
         } else {
-          navigation.navigate('App1');
+          navigation.replace('App1');
           let name = JSON.parse(response).name;
           context.setName(name);
           context.setAuthState(true);

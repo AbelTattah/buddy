@@ -3,7 +3,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import RNFS from 'react-native-fs';
 import PrimaryButton from '../buttonPrimary';
 import {SetStateAction} from 'react';
-import {addToHistory} from '../../Screens/history';
+import {addToHistory} from '../../Screens/downloads';
 import notifee from '@notifee/react-native';
 import {useNavigation} from '@react-navigation/native';
 import { userContext } from '../../store/user';
@@ -21,7 +21,9 @@ export async function download(
   setMax: any,
   setCurrent: any,
   setJobId: any,
-  setError:any
+  setError:any,
+  addDownload:any ="none",
+  updateDownloadProgress:any = "none"
 ) {
 
   // Document destination
@@ -66,6 +68,8 @@ export async function download(
 
       jobId = res.jobId
 
+      updateDownloadProgress(res.jobId,res.bytesWritten / res.contentLength)
+
       setState(res.bytesWritten / res.contentLength);
 
       setCurrent(res.bytesWritten);
@@ -79,7 +83,7 @@ export async function download(
         // Download progress in mb
         body:
           name +
-          `${res.bytesWritten / 1000000} /  ${res.contentLength / 1000000} MB`,
+          `${res.bytesWritten.toFixed(2) / 1000000} /  ${res.contentLength.toFixed(2) / 1000000} MB`,
         android: {
           progress: {
             max: res.contentLength,
@@ -93,6 +97,15 @@ export async function download(
     },
   };
 
+  if (addDownload!=="none") {
+    addDownload(
+      jobId,
+      url,
+      image,
+      name
+    )
+  }
+
   // Start Download
   await RNFS.downloadFile(options)
     .promise.then(async res => {
@@ -101,6 +114,9 @@ export async function download(
 
       // Update Item in parent component
       setItem({name: name, endpoint: dest});
+      
+      // Update download progress on downloads screen
+      updateDownloadProgress(jobId,1)
 
       // Cancel the previous download notification
       await notifee.cancelNotification(id);
@@ -179,7 +195,7 @@ export default function Download({
   // Navigation
   const navigation = useNavigation();
 
-  const {addDownload,removeDownload} = useContext(userContext)
+  const {addDownload,removeDownload,updateDownloadProgress} = useContext(userContext)
 
     // Document destination
     const dest = `${RNFS.DocumentDirectoryPath}/${name}`;
@@ -201,13 +217,10 @@ export default function Download({
       setCurrent,
       setJobId,
       setError,
+      addDownload,
+      updateDownloadProgress
     )
-    addDownload(
-      jobId,
-      url,
-      image,
-      name
-    )
+    removeDownload
   }
 
   // Cancel download function

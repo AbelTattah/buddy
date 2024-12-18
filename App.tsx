@@ -13,7 +13,6 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native'; // Importing components from react-native
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'; // Importing the createBottomTabNavigator from @react-navigation/bottom-tabs
 
 // Importing the styles from the styles file
 import Settings from './Screens/settings';
@@ -31,7 +30,7 @@ import Login from './Screens/login';
 import Register from './Screens/register';
 import Home from './Screens/Home';
 import Icon from 'react-native-vector-icons/Ionicons';
-import History from './Screens/history';
+import Downloads from "./Screens/downloads";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Colors from './Components/constants/Colors';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -40,7 +39,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 const Stack = createNativeStackNavigator();
 
 // The constant below allows the usage of the tab navigator
-const Tab = createBottomTabNavigator();
 
 // Drawer Navigator
 const Drawer = createDrawerNavigator();
@@ -100,13 +98,13 @@ function App1({navigation}: any) {
       {isLoggedIn ? (
         <NavigationContainer independent>
           <Drawer.Navigator screenOptions={{
-            drawerActiveTintColor:Colors.primary300,
-            drawerInactiveTintColor: 'white',
+            drawerActiveTintColor:"black",
+            drawerInactiveTintColor: "black",
             drawerStyle: {
               paddingTop: 20,
-              backgroundColor:Colors.primary300,
+              backgroundColor:"white",
             },
-            drawerActiveBackgroundColor:"white",
+            drawerActiveBackgroundColor:"#ddd",
             drawerLabelStyle: {
               fontSize: 15,
             },
@@ -116,7 +114,7 @@ function App1({navigation}: any) {
               name="Home"
               options={{
                 drawerIcon : ({focused,color}) => (
-                  <Icon name="home-outline" size={25} color ={color} />
+                  <Icon name="home-outline" size={25} color ="black" />
                 ),
                 drawerLabelStyle: {
                   fontSize: 15,
@@ -129,14 +127,15 @@ function App1({navigation}: any) {
               }}      
             />
             <Drawer.Screen
-              component={History}
+              component={Downloads}
               name="Downloads"
               options={{
                 drawerIcon: ({color}) => (
-                  <Icon name="download" size={25} color={color} />
+                  <Icon name="download-outline" size={25} color="black" />
                 ),
                 drawerLabelStyle: {
                   fontSize: 15,
+                  color: 'black',
                   fontFamily: 'FredokaBold',
                 },
                 headerTitle:"Downloads",
@@ -148,11 +147,13 @@ function App1({navigation}: any) {
               name="Settings"
               component={Settings}
               options={{
+                headerShown:false,
                 drawerIcon: ({color}) => (
-                  <Icon name="settings-outline" size={25} color={color} />
+                  <Icon name="settings-outline" size={25} color="black" />
                 ),
                 drawerLabelStyle: {
                   fontSize: 15,
+                  color: 'black',
                   fontFamily: 'FredokaBold',
                 },
                 headerShadowVisible: false,

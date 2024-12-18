@@ -11,7 +11,7 @@ export const userContext = createContext({
   url: '',
   theme: 'light',
   statusBar: false,
-  downloads: {},
+  downloads: [],
   setStatusBar: (value: boolean) => {},
   setTheme: (sid: string) => {},
   setUrl: (url: string) => {},
@@ -19,7 +19,7 @@ export const userContext = createContext({
   setName: (name: string) => {},
   setAuthState: (auth: boolean) => {},
   setPdf: (pdf: string) => {},
-  addDownload: (id: string, url: string, image: string, name:string) => {},
+  addDownload: (id: any, url: string, image: string, name:string) => {},
   removeDownload: (id: string) => {},
   restartDownload: (id: string) => {},
   downloadError: (data:{
@@ -38,7 +38,7 @@ function UserContextProvider({children}: any) {
   const [theme, setTHEME] = useState('light');
   const [statusBar, setStatusbar] = useState(false);
   const [url, setURL] = useState('');
-  const [downloads, updateDownloads] = useState({});
+  const [downloads, updateDownloads] = useState<any>([]);
   const [dummyState, setDummyState] = useState({})
   
 
@@ -107,7 +107,7 @@ function UserContextProvider({children}: any) {
   async function getDownloads() {
     const data = await AsyncStorage.getItem('downloads');
     if (data == null) {
-      updateDownloads({});
+      updateDownloads([]);
     } else {
       updateDownloads(JSON.parse(data));
     }
@@ -117,57 +117,64 @@ function UserContextProvider({children}: any) {
   async function addDownload(id: any, url: string, image: string, name:string) {
     const data = await AsyncStorage.getItem('downloads');
     if (data == null) {
-      updateDownloads({
-        data: [
+      updateDownloads(
+        [
           {
             id: id,
             url: url,
-            name:name,
             image: image,
-            progress: 0,
-          },
-        ],
-      });
+            name:name,
+            progress:0,
+          }
+        ]
+      );
       await AsyncStorage.setItem(
         'downloads',
-        JSON.stringify({
-          data: [
-            {
-              id: id,
-              url: url,
-              image: image,
-              name:name,
-              progress:0,
-            },
-          ],
-        }),
+        JSON.stringify(
+          {
+            data: [
+              {
+                id: id,
+                url: url,
+                image: image,
+                name:name,
+                progress:0,
+              }              
+            ]
+          }
+        ),
       );
     } else {
-      updateDownloads(JSON.parse(data));
-      const currentData: any = JSON.stringify(data);
+      const currentDataObject: any = JSON.parse(data);
+      let currentData:any = currentDataObject.data
+      let updatedCurrentData:any = currentData.unshift({
+          id: id,
+          url: url,
+          image: image,
+          name:name,
+          progress:0,
+      })
 
       await AsyncStorage.setItem(
         'downloads',
         JSON.stringify({
           data: [
-            ...currentData.data,
-            {
-              id: id,
-              url: url,
-              image: image,
-              name:name,
-              progress:0,
-            },
+            updatedCurrentData
           ],
         }),
       );
+
+      updateDownloads(
+        updatedCurrentData
+      );
     }
+    console.log(downloads)
   }
 
   // Remove download from local storage
   async function removeDownload(id: string) {
-    const data = await AsyncStorage.getItem('downloads');
-    const currentData: any = JSON.stringify(data);
+    const data:any = await AsyncStorage.getItem('downloads');
+    const currentData: any = JSON.parse(data);
 
     let updatedCurrentData: any = currentData.data;
     // Remove item with ID
@@ -189,28 +196,35 @@ function UserContextProvider({children}: any) {
 
   // Update download progress
     async function updateDownloadProgress(id: string, progress: number) {
-        const data = await AsyncStorage.getItem('downloads');
-        const currentData: any = JSON.stringify(data);
+      // // Find the id and update the status
+      // const localData:any = await AsyncStorage.getItem('downloads');
+
+      // let downloadObject = JSON.parse(localData)
+      // downloadObject = downloadObject.data.find((id:any)=>id==id)
+      // downloadObject = downloadObject[0]
+      // downloadObject = {
+      //   ...downloadObject,
+      //   progress:progress,
+      // }
+
+      // const filteredCurrentDownloadData = JSON.parse(localData).data.filter(
+      //   (item: any) => item.id !== id,
+      // );
+       
+      // const updatedCurrentDownloadData = filteredCurrentDownloadData.push({
+      //   downloadObject
+      // })
     
-        let updatedCurrentData: any = currentData.data;
-        // Update item with ID
-        updatedCurrentData = updatedCurrentData.map((item: any) => {
-        if (item.id === id) {
-            item.progress = progress;
-        }
-        return item;
-        });
-    
-        updateDownloads({
-        data: [...updatedCurrentData],
-        });
-    
-        await AsyncStorage.setItem(
-        'downloads',
-        JSON.stringify({
-            data: [...updatedCurrentData],
-        }),
-        );
+      // updateDownloads({
+      //   data:updatedCurrentDownloadData
+      // })
+
+      // await AsyncStorage.setItem(
+      //   'downloads',
+      //   JSON.stringify({
+      //     data:updatedCurrentDownloadData
+      //   }),
+      // );
     }
 
   async function restartDownload(id: string) {

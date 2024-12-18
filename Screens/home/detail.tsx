@@ -2,7 +2,7 @@ import {StyleSheet, Text, View, Image, Share} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import PrimaryButton from '../../Components/buttonPrimary';
 import Download from '../../Components/functions/download';
-import {searchHistory} from '../history';
+import {searchHistory} from '../downloads';
 import {userContext} from '../../store/user';
 import Icon from 'react-native-vector-icons/Entypo';
 import Colors from '../../Components/constants/Colors';
@@ -176,6 +176,7 @@ const styles = StyleSheet.create({
   },
   preview: {
     marginTop: 20,
+    elevation: 5,
     borderColor: Colors.primary100,
     borderWidth: 0.5,
     borderRadius: 10,

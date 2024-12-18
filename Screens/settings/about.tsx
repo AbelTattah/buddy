@@ -46,12 +46,13 @@ export default function About() {
         style={{
           width: 340,
           gap: 20,
-          marginTop: 40,
           backgroundColor:
             theme == 'light' ? Colors.primary200 : Colors.primary100,
         }}>
         <Text
           style={{
+            fontSize: 25,
+            fontWeight: 'bold',
             color: theme == 'light' ? Colors.primary100 : Colors.primary200,
           }}>
           {info1}
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: 25,
     backgroundColor: '#fff',
   },
   link: {},

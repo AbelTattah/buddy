@@ -198,13 +198,23 @@ const DocumentSearch = ({navigation}: any) => {
     <View
       style={{
         flex: 1,
-        paddingTop:40,
+        paddingTop:70,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor:
           theme == 'dark' ? Colors.primary100 : Colors.primary200,
       }}>
-
+      <Text 
+      style={{
+        color: theme == 'light' ? Colors.primary100 : Colors.primary200,
+        fontSize:25,
+        marginBottom:20,
+        position:"absolute",
+        top:15,
+        left:15,
+      }}>
+        Search 
+      </Text>
       <PrimarySearch
         handleSearch={()=>searchHandler(code)}
         textInput={
@@ -238,11 +248,10 @@ const DocumentSearch = ({navigation}: any) => {
           <View
             style={{
               width: '90%',
-              height: 'auto',
+              height: '20%',
               maxHeight: 100,
               backgroundColor:
                 theme == 'light' ? Colors.primary200 : Colors.primary100,
-                marginBottom:10,
               borderColor:"#eee",
               borderWidth: 1,
               borderRadius: 10,
@@ -270,7 +279,7 @@ const DocumentSearch = ({navigation}: any) => {
               horizontal
               style={{
                 width: '100%',
-                height: 'auto',
+                height: '70%',
                 maxHeight: 50,
               }}>
               {
@@ -446,11 +455,9 @@ const DocumentNav = ({navigation}) => {
           options={{
             headerShown: false,
             headerStyle: {
-              backgroundColor:
-                theme == 'light' ? Colors.primary200 : Colors.primary100,
+              backgroundColor:"white",
             },
-            headerTintColor:
-              theme == 'light' ? Colors.primary100 : Colors.primary200,
+            headerTintColor:"black",
           }}
           component={DocumentSearch}
         />

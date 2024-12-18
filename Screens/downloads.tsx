@@ -87,7 +87,7 @@ export const removeHistory = async (name: string) => {
 const Stack = createNativeStackNavigator();
 
 // Main History Component
-const HistMain = ({navigation}) => {
+const DownloadsMain = ({navigation}) => {
   const [history, setHistory] = useState<{}>({});
   const {setUrl, theme, downloads} = useContext(userContext);
   const isFocused = useIsFocused();
@@ -101,6 +101,7 @@ const HistMain = ({navigation}) => {
   useEffect(() => {
     if (isFocused) {
       Load();
+      console.log(downloads)
     }
   });
 
@@ -112,7 +113,78 @@ const HistMain = ({navigation}) => {
           backgroundColor: 'white',
         },
       ]}>
-      <View style={style.top}></View>
+      <Text 
+       style={{
+        fontWeight:'bold',
+        fontSize:25,
+        position:'absolute',
+        left:15,
+        top:15,
+        color:'black'
+       }}>
+        Downloads
+       </Text>
+      {downloads?.data?.length > 0 && (
+        <Text
+          style={{
+            marginTop: 40,
+            color: theme == 'light' ? Colors.primary100 : Colors.primary200,
+            fontSize: 20,
+            fontWeight: '500',
+            marginBottom: 10,
+          }}>
+          In progress
+        </Text>
+      )}
+
+      <View style={style.top}>
+        {downloads?.data?.map((item: any) => {
+          return (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                width: '90%',
+                borderBottomWidth: 0.3,
+                paddingBottom: 15,
+                marginBottom: 20,
+                alignItems: 'center',
+              }}>
+              <Image
+                source={{uri: item.image}}
+                style={{
+                  marginTop: 10,
+                  width: '26%',
+                  height: '80%',
+                  borderWidth: 0.5,
+                  borderColor: '#ddd',
+                  borderRadius: 10,
+                }}
+              />
+              <View style={style.button1}>
+                <Text
+                  style={{
+                    color:
+                      theme == 'light' ? Colors.primary100 : Colors.primary200,
+                    fontSize: 16,
+                    fontWeight: '500',
+                    width: '60%',
+                    padding: 10,
+                  }}>
+                  {item.name}
+                </Text>
+              </View>
+              {/* Progress */}
+              <View
+                style={{
+                  width: '14%',
+                }}>
+               <Text>{item.progress * 100}</Text> <Text>%</Text>
+              </View>
+            </View>
+          );
+        })}
+      </View>
       <View style={style.subContainer}>
         {Object.keys(history).length == 0 && <Text>No recent Resources</Text>}
         {history ? (
@@ -173,7 +245,7 @@ const HistMain = ({navigation}) => {
                       style={{
                         marginTop: 10,
                         width: '26%',
-                        height: "80%",
+                        height: '80%',
                         borderWidth: 0.5,
                         borderColor: '#ddd',
                         borderRadius: 10,
@@ -229,29 +301,25 @@ const HistMain = ({navigation}) => {
   );
 };
 
-const History = ({navigation}) => {
+const Downloads = ({navigation}) => {
   const {setPdf, theme} = useContext(userContext);
   useEffect(() => {
     navigation.setOptions({
+      headerShown: false,
       headerLeft: () => (
         <TouchableOpacity
           style={{marginLeft: 20}}
           onPress={() => {
             navigation.openDrawer();
           }}>
-          <Icon
-            name="menu"
-            size={30}
-            color={"white"}
-          />
+          <Icon name="menu" size={30} color={'white'} />
         </TouchableOpacity>
       ),
       headerTitle: 'Downloads',
-      headerTintColor: 'white',  
-      headerStyle:{
-        backgroundColor: Colors.primary300
-      }
-    
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: Colors.primary300,
+      },
     });
   }, []);
   return (
@@ -259,7 +327,7 @@ const History = ({navigation}) => {
       <Stack.Navigator>
         <Stack.Screen
           name="Main"
-          component={HistMain}
+          component={DownloadsMain}
           options={({navigation, route}: any) => {
             return {
               headerShadowVisible: false,
@@ -283,7 +351,7 @@ const History = ({navigation}) => {
   );
 };
 
-export default History;
+export default Downloads;
 
 const style = StyleSheet.create({
   container: {
@@ -323,6 +391,7 @@ const style = StyleSheet.create({
     width: '100%',
     margin: 5,
     padding: 5,
+    marginTop:40,
     justifyContent: 'center',
     alignItems: 'center',
   },

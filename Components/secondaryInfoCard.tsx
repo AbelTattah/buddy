@@ -25,7 +25,7 @@ interface PrimaryInfoCard {
 }
 
 // PrimaryInfoCard Component
-function PrimaryInfoCard({
+function SecondaryInfoCard({
   name,
   date,
   image,
@@ -87,7 +87,6 @@ function PrimaryInfoCard({
     <View
       style={[
         styles.container,
-        {borderColor: theme == 'light' ? Colors.primary100 : Colors.primary200},
       ]}>
       <TouchableOpacity onLongPress={onLongPress} onPress={onPress}>
         <View style={[styles.middle, {height: image == '' ? '0%' : '75%'}]}>
@@ -118,21 +117,20 @@ function PrimaryInfoCard({
   );
 }
 
-export default PrimaryInfoCard;
+export default SecondaryInfoCard;
 
 const styles = StyleSheet.create({
   container: {
-    width: '47.5%',
+    width: '100%',
+    elevation:1,
     marginTop: 15,
     marginRight: 15,
     padding: 10,
-    elevation: 5,
     marginBottom: 20,
     minHeight: 300,
-    overflow:"hidden",
     paddingBottom:10,
     maxHeight:400,
-    borderRadius: 2,
+    borderRadius:3
   },
   listView: {
     width: '100%',
@@ -193,7 +191,6 @@ const styles = StyleSheet.create({
     height: '70%',
     borderStyle: 'solid',
     alignItems: 'center',
-    borderColor: 'gray',
     borderBottomWidth: 0.5,
   },
   listMiddle: {

@@ -12,16 +12,16 @@ import {userContext} from '../store/user';
 import {useContext} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
 import Preferences from './settings/preferences';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import About from './settings/about';
 import Feedback from './settings/feedback';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {getHistory} from './history';
+import {getHistory} from './downloads';
 import Header from '../Components/header';
 import Colors from '../Components/constants/Colors';
 
-const stack = createStackNavigator();
+const stack = createNativeStackNavigator();
 
 // Settings page
 export function Main({navigation}: any) {
@@ -58,70 +58,83 @@ export function Main({navigation}: any) {
           width: '90%',
           gap:25
         }}>
+        <Text
+          style={{
+            fontSize: 25,
+            marginBottom:10,
+            fontWeight: 'bold',
+            color: theme == 'light' ? Colors.primary100 : Colors.primary200,
+          }}>
+          Settings
+        </Text>
         <TouchableOpacity
           onPress={() => navigation.navigate('Preferences')}
           style={styles.button}>
+          <Icon
+            name="settings-outline"
+            size={22}
+            color={theme == 'light' ? Colors.primary100 : Colors.primary200}
+          />
           <Text
             style={[
               styles.option,
-              {color: theme == 'light' ? Colors.primary100 : Colors.primary200},
+              {color: theme == 'light' ? Colors.primary100 : Colors.primary200, marginLeft:20},
             ]}>
             Preferences
           </Text>
-          <Icon name="chevron-forward" size={22}
-            color={theme == 'light' ? Colors.primary100 : Colors.primary200}
-          />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.navigate('Feedback')}
           style={styles.button}>
+          <Icon
+            name="send-outline"
+            size={22}
+            color={theme == 'light' ? Colors.primary100 : Colors.primary200}
+          />
           <Text
             style={[
               styles.option,
-              {color: theme == 'light' ? Colors.primary100 : Colors.primary200},
+              {color: theme == 'light' ? Colors.primary100 : Colors.primary200, marginLeft:20},
             ]}>
             Feedback
           </Text>
-          <Icon
-            name="chevron-forward"
-            size={22}
-            color={theme == 'light' ? Colors.primary100 : Colors.primary200}
-          />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.navigate('About')}
-          style={styles.button}>
-          <Text
-            style={[
-              styles.option,
-              {color: theme == 'light' ? Colors.primary100 : Colors.primary200},
-            ]}>
-            About
-          </Text>
-          <Icon
-            name="chevron-forward"
+          style={[styles.button,{justifyContent:'flex-start'}]}>
+                      <Icon
+            name="information-outline"
             size={22}
             color={theme == 'light' ? Colors.primary100 : Colors.primary200}
           />
+          <Text
+            style={[
+              styles.option,
+              {color: theme == 'light' ? Colors.primary100 : Colors.primary200,marginLeft:20},
+            ]}>
+            About
+          </Text>
+
         </TouchableOpacity>
         <TouchableOpacity
           onPress={async () => {
             context.setAuthState(false);
             await AsyncStorage.removeItem('Data');
           }}
-          style={styles.button}>
-          <Text
-            style={[
-              styles.option,
-              {color: theme == 'light' ? Colors.primary100 : Colors.primary200},
-            ]}>
-            Logout
-          </Text>
-          <Icon
-            name="exit"
+          style={[styles.button,{justifyContent:'flex-start'}]}>
+            <Icon
+            name="exit-outline"
             size={22}
             color={theme == 'light' ? Colors.primary100 : Colors.primary200}
           />
+          <Text
+            style={[
+              styles.option,
+              {color: theme == 'light' ? Colors.primary100 : Colors.primary200, marginLeft:20},
+            ]}>
+            Logout
+          </Text>
+
         </TouchableOpacity>
       </View>
       <Text
@@ -171,6 +184,7 @@ export default function Settings({navigation}: any) {
         <stack.Screen
           name="Preferences"
           options={{
+            headerShown:false,
             header: () => (
               <Header
                 title="Preferences"
@@ -184,6 +198,7 @@ export default function Settings({navigation}: any) {
         <stack.Screen
           name="About"
           options={{
+            headerShown:false,
             header: () => (
               <Header title="About" sub="Learn more about us" button={<></>} />
             ),
@@ -192,6 +207,7 @@ export default function Settings({navigation}: any) {
         />
         <stack.Screen
           options={{
+            headerShown:false,
             header: () => (
               <Header
                 title="Feedback"
@@ -215,10 +231,11 @@ const styles = StyleSheet.create({
   },
   button: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     height:40,
     alignItems: 'center',
-    borderBottomWidth: 0.5,
+    paddingBottom: 10,
+    borderBottomWidth:0.5,
     borderBottomColor: '#999',
   },
   option: {

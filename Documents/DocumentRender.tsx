@@ -14,6 +14,9 @@ const DocumentRenderer = ({ navigation, route }: any) => {
   const context = useContext(userContext);
   useEffect(() => {
     console.log(context.url);
+    navigation.setOptions({
+      header: () => null,
+    })
   }, []);
 
   return (

@@ -14,7 +14,7 @@ import React, {useContext} from 'react';
 import Colors from '../Components/constants/Colors';
 import {userContext} from '../store/user';
 import GenreCard from '../Components/genreCard';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import DocumentNav from '../Documents/Document';
 import DocumentRenderer from '../Documents/DocumentRender';
@@ -23,8 +23,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {FlatList} from 'react-native-gesture-handler';
 import Detail from './home/detail';
 import PrimaryInfoCard from '../Components/primaryInfoCard';
+import SecondaryInfoCard from '../Components/secondaryInfoCard';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 var images: any[] = [];
 var featuredImages: any[] = [];
 
@@ -37,7 +38,7 @@ const Main = ({navigation}) => {
   const {name, theme} = useContext(userContext);
 
   //Url Context
-  const {setUrl} = useContext(userContext);
+  const {setUrl, } = useContext(userContext);
 
 
   // State
@@ -365,7 +366,7 @@ navigation.setOptions({
         marginRight: 15,
       }}
       onPress={() => navigation.navigate('Search')}>
-      <Icon name="search-outline" size={30} color="#fff" />
+      <Icon name="search-outline" size={30} color="black" />
     </TouchableOpacity>
   ),
 })
@@ -556,11 +557,11 @@ navigation.setOptions({
             ) : (
               <FlatList
                 data={book}
-                numColumns={2}
+                numColumns={1}
                 keyExtractor={item => item.title}
                 renderItem={({item, index}) => {
                   return (
-                    <PrimaryInfoCard
+                    <SecondaryInfoCard
                       name={''}
                       type="any"
                       date={item['date']}
@@ -670,18 +671,16 @@ const Home = ({navigation}) => {
             headerLeft: () => (
               <TouchableOpacity
                 style={{
-                  marginLeft: 15,
+                  marginRight:20,
                 }}
                 onPress={() => navigation.openDrawer()}>
-                <Icon name="menu-outline" size={30} color="#fff" />
+                <Icon name="menu-outline" size={35} color="black" />
               </TouchableOpacity>
             ),
             headerStyle: {
-              backgroundColor:
-                theme == 'light' ? Colors.primary300 : Colors.primary100,
+              backgroundColor:"#ddd"
             },
-            headerTintColor:
-              theme == 'light' ? Colors.primary200 : Colors.primary200,
+            headerTintColor:"black",
 
           }}
         />
@@ -690,12 +689,11 @@ const Home = ({navigation}) => {
           component={DocumentNav}
           options={({route}) => {
             return {
+              headerShown: false,
             headerStyle: {
-                backgroundColor:
-                  theme == 'light' ? Colors.primary300 : Colors.primary100,
+                backgroundColor:"white",
               },
-              headerTintColor:
-                theme == 'light' ? Colors.primary200 : Colors.primary200,
+              headerTintColor:"black",
             };
           }}
         />
