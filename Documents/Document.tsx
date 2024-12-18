@@ -149,7 +149,6 @@ const DocumentSearch = ({navigation}: any) => {
   // Search for past questions
   const searchHandler = (code:string) => {
     setSearching(true);
-    addtoSearchHistory(code)
     setPlaceholder('Enter book name');
     setPlaceholderColor('grey');
     if (code == '') {
@@ -157,6 +156,7 @@ const DocumentSearch = ({navigation}: any) => {
       setPlaceholderColor('red');
       return;
     } else {
+      addtoSearchHistory(code)
       setLoading(true);
       setComms('');
       this.textInput.clear();
@@ -198,7 +198,7 @@ const DocumentSearch = ({navigation}: any) => {
     <View
       style={{
         flex: 1,
-        paddingTop:25,
+        paddingTop:40,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor:

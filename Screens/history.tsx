@@ -89,7 +89,7 @@ const Stack = createNativeStackNavigator();
 // Main History Component
 const HistMain = ({navigation}) => {
   const [history, setHistory] = useState<{}>({});
-  const {setUrl, theme} = useContext(userContext);
+  const {setUrl, theme, downloads} = useContext(userContext);
   const isFocused = useIsFocused();
 
   async function Load() {

@@ -4,7 +4,6 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  Image,
   ActivityIndicator,
   TouchableOpacity,
   useWindowDimensions,
@@ -22,39 +21,58 @@ import DocumentRenderer from '../Documents/DocumentRender';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {FlatList} from 'react-native-gesture-handler';
-import {addToHistory} from './history';
-import {set} from 'firebase/database';
 import Detail from './home/detail';
 import PrimaryInfoCard from '../Components/primaryInfoCard';
-import Header from '../Components/header';
 
 const Stack = createStackNavigator();
 var images: any[] = [];
 var featuredImages: any[] = [];
 
+// URL
+export const url = "https://buddy-zpdh.onrender.com/geturl"
+
 // Main Home Component
 const Main = ({navigation}) => {
+  // User context
   const {name, theme} = useContext(userContext);
+
+  //Url Context
+  const {setUrl} = useContext(userContext);
+
+
+  // State
   const [nameId, setName] = useState('');
   const [book, setBook] = useState<any[]>([]);
   const [featured, setFeatured] = useState<any[]>([]);
-  const [loadingExplore, setLoadingExplore] = useState(false);
-  const [loadingFeatured, setLoadingFeatured] = useState(false);
+
+  // Pdf
   const [currentPdf, setCurrentPdf] = useState<string>('');
   const [limit, setLimit] = useState(false);
+
+  // Refresh
   const [refreshing, setRefreshing] = useState(false);
   const [updating, setUpdating] = useState(false);
+
+  // Explore
+  const [loadingExplore, setLoadingExplore] = useState(false);
   const [errorExplore, setErrorExplore] = useState(false);
+
+  // Featured
   const [errorFeatured, setErrorFeatured] = useState(false);
+  const [loadingFeatured, setLoadingFeatured] = useState(false);
+
 
   //Responsiveness
   const {width, height} = useWindowDimensions();
 
-  //Pdf regex http://207.211.176.165/buddy
+  //Pdf regex 
   const test = /pdf/;
   var count = 0;
 
+  // Loading
   const [loading, setLoading] = useState(true);
+
+  // Genre
   const [genre, setGenre] = useState([
     'AI',
     'Science',
@@ -70,6 +88,8 @@ const Main = ({navigation}) => {
     'Crafts',
     'DIY',
   ]);
+
+  // Genre Icons
   const [genreIcon, setGenreIcon] = useState([
     <Icon name="brush-outline" size={22} color="#999" />,
     <Icon name="flask-outline" size={22} color="#999" />,
@@ -86,8 +106,8 @@ const Main = ({navigation}) => {
     <Icon name="chevron-forward" size={22} color="#999" />,
   ]);
 
-  const {setUrl} = useContext(userContext);
 
+  // Change Genre function
   const changeGenre = async (bookCode: string, isfeatured: boolean) => {
     if (isfeatured) {
       setErrorFeatured(false);
@@ -97,7 +117,7 @@ const Main = ({navigation}) => {
 
       try {
         const response = await axios.post(
-          'https://octopus-app-3-6xu4s.ondigitalocean.app/geturl',
+          '',
           {
             keywords: bookCode,
           },
@@ -140,7 +160,7 @@ const Main = ({navigation}) => {
 
     try {
       const response = await axios.post(
-        'https://octopus-app-3-6xu4s.ondigitalocean.app/geturl',
+        url,
         {
           keywords: bookCode,
         },
@@ -177,6 +197,7 @@ const Main = ({navigation}) => {
     }
   };
 
+  // Initial Load function
   const initialLoad = async (bookCode: string, isfeatured: boolean) => {
     if (isfeatured) {
       setFeatured([]);
@@ -186,7 +207,7 @@ const Main = ({navigation}) => {
       setLoadingFeatured(true);
       try {
         const response = await axios.post(
-          'https://octopus-app-3-6xu4s.ondigitalocean.app/geturl',
+          url,
           {
             keywords: bookCode,
           },
@@ -229,7 +250,7 @@ const Main = ({navigation}) => {
 
     try {
       const response = await axios.post(
-        'https://octopus-app-3-6xu4s.ondigitalocean.app/geturl',
+        url,
         {
           keywords: bookCode,
         },
@@ -266,12 +287,14 @@ const Main = ({navigation}) => {
     }
   };
 
+
+  // Update function
   const update = async (bookCode: string, isfeatured: boolean) => {
     setErrorExplore(false);
     setUpdating(true);
     try {
       const response = await axios.post(
-        'https://octopus-app-3-6xu4s.ondigitalocean.app/geturl',
+        url,
         {
           keywords: bookCode,
         },
@@ -310,7 +333,6 @@ const Main = ({navigation}) => {
   };
 
   // Refresh
-
   const refresh = () => {
     setRefreshing(true);
     let random = Math.floor(Math.random() * 6);
@@ -322,26 +344,15 @@ const Main = ({navigation}) => {
     setRefreshing(false);
   }
 
-  // Navigate to pdf view
-  const navigationHandler = () => {
-    setTimeout(() => {
-      if (
-        book[0]['title'] == 'Not found' ||
-        book[0]['title'] == 'An error occured'
-      ) {
-        return;
-      } else {
-        navigation.navigate('View', {
-          book: currentPdf,
-        });
-      }
-    }, 1000);
-  };
-
   useEffect(() => {
+    // Initial load
     let random = Math.floor(Math.random() * 6);
     let random2 = Math.floor(Math.random() * (12 - 6 + 1)) + 6;
+
+    // Set name
     setName(name);
+
+    // Load books
     initialLoad(genre[random], false);
     initialLoad(genre[random2], true);
   }, []);
@@ -354,7 +365,7 @@ navigation.setOptions({
         marginRight: 15,
       }}
       onPress={() => navigation.navigate('Search')}>
-      <Icon name="search-outline" size={25} color="#fff" />
+      <Icon name="search-outline" size={30} color="#fff" />
     </TouchableOpacity>
   ),
 })
@@ -645,6 +656,7 @@ navigation.setOptions({
   );
 };
 
+// Main Home component
 const Home = ({navigation}) => {
   const {theme} = useContext(userContext);
 
@@ -661,7 +673,7 @@ const Home = ({navigation}) => {
                   marginLeft: 15,
                 }}
                 onPress={() => navigation.openDrawer()}>
-                <Icon name="menu-outline" size={25} color="#fff" />
+                <Icon name="menu-outline" size={30} color="#fff" />
               </TouchableOpacity>
             ),
             headerStyle: {
